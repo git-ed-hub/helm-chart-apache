@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-ssl
+  labels:
+    app: apache-ssl
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: apache-ssl
+  template:
+    metadata:
+      labels:
+        app: apache-ssl
+    spec:
+      initContainers:
+        - name: git-clone-repository
+          image: {{ .Values.initContainers.git.repository }}
+          imagePullPolicy: {{ .Values.initContainers.git.pullPolicy | quote }}
+          command:
+          args:
+            - clone
+            - --single-branch
+            - --
+            - https://github.com/git-ed-hub/web-template.git
+            - /data
+          
+          volumeMounts:
+            - name: web-template
+              mountPath: /data
+      containers:
+        - name: web-apache
+          image: {{ .Values.containers.image.repository }}
+          ports:
+            - containerPort: {{ .Values.containers.containerPort }}
+          volumeMounts:
+            - name: {{ .Values.containers.volumeMounts.name }}
+              mountPath: {{ .Values.containers.volumeMounts.mountPath}}
+      volumes:
+      - name: web-template
