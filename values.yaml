@@ -20,7 +20,7 @@ initContainers:
       
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
   name: port-web-apache
   targetPort: 80

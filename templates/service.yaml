@@ -4,7 +4,7 @@ metadata:
   name: svc-web-apache
 spec:
   selector:
-    name: web-apache
+    app: apache-ssl
   ports:
     - name: {{ .Values.service.name }}
       protocol: TCP
