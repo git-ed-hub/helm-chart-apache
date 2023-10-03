@@ -17,7 +17,7 @@ spec:
       initContainers:
         - name: git-clone-repository
           image: {{ .Values.initContainers.git.repository }}
-          imagePullPolicy: {{ .Values.initContainers.git.pullPolicy | quote }}
+          imagePullPolicy: IfNotPresent
           command:
           args:
             - clone
@@ -33,9 +33,9 @@ spec:
         - name: web-apache
           image: {{ .Values.containers.image.repository }}
           ports:
-            - containerPort: {{ .Values.containers.containerPort }}
+            - containerPort: 80
           volumeMounts:
-            - name: {{ .Values.containers.volumeMounts.name }}
-              mountPath: {{ .Values.containers.volumeMounts.mountPath}}
+            - name: web-template
+              mountPath: /usr/local/apache2/htdocs/
       volumes:
       - name: web-template
